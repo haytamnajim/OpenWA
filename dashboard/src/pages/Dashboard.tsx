@@ -2,7 +2,25 @@ import { Suspense } from 'react';
 import { lazyWithRetry as lazy } from '../utils/lazyWithRetry';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MessageSquare, Send, Webhook, Activity, Loader2 } from 'lucide-react';
+import {
+  MessageSquare,
+  Send,
+  Webhook,
+  Activity,
+  Loader2,
+  Smartphone,
+  Phone,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  XCircle,
+  QrCode,
+  Eye,
+  Power,
+  Hash,
+  Layers,
+  SlidersHorizontal,
+} from 'lucide-react';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useRole } from '../hooks/useRole';
 import { useToast } from '../hooks/useToast';
@@ -67,17 +85,15 @@ export function Dashboard() {
 
   const statsCards = [
     {
-      // `stats.active` counts running engines — which includes initializing/qr_ready/connecting — so
-      // it overstates what an operator reads as "connected". READY is the only status where the
-      // session can actually send and receive.
       label: t('dashboard.stats.activeSessions'),
       value: stats?.ready ?? 0,
       icon: MessageSquare,
+      theme: 'emerald',
       detail: stats ? t('dashboard.stats.sessionsDetail', { running: stats.active, total: stats.total }) : undefined,
     },
-    { label: t('dashboard.stats.messagesToday'), value: messagesToday, icon: Send },
-    { label: t('dashboard.stats.webhooksConfigured'), value: webhookCount, icon: Webhook },
-    { label: t('dashboard.stats.totalMessages'), value: totalMessages, icon: Activity },
+    { label: t('dashboard.stats.messagesToday'), value: messagesToday, icon: Send, theme: 'sky' },
+    { label: t('dashboard.stats.webhooksConfigured'), value: webhookCount, icon: Webhook, theme: 'violet' },
+    { label: t('dashboard.stats.totalMessages'), value: totalMessages, icon: Activity, theme: 'amber' },
   ];
 
   const formatLastActive = (date?: string | null) => {
@@ -121,21 +137,29 @@ export function Dashboard() {
         subtitle={t('dashboard.subtitle')}
         badge={
           <span className={`status-badge ${stats && stats.ready > 0 ? 'connected' : 'disconnected'}`}>
+            <span className={`status-dot ${stats && stats.ready > 0 ? 'pulse' : 'inactive'}`} />
             {stats && stats.ready > 0 ? t('common.connected') : t('common.disconnected')}
           </span>
         }
       />
 
       <div className="stats-grid">
-        {statsCards.map(({ label, value, icon: Icon, detail }) => (
-          <div key={label} className="stat-card">
+        {statsCards.map(({ label, value, icon: Icon, theme, detail }) => (
+          <div key={label} className={`stat-card theme-${theme}`}>
             <Icon className="stat-watermark" />
             <div className="stat-header">
               <span className="stat-label">{label}</span>
-              <Icon size={20} className="stat-icon" />
+              <div className="stat-icon-wrapper">
+                <Icon size={20} />
+              </div>
             </div>
             <div className="stat-value">{typeof value === 'number' ? value.toLocaleString() : value}</div>
-            {detail && <div className="stat-detail">{detail}</div>}
+            {detail && (
+              <div className="stat-detail">
+                <Layers size={13} className="stat-detail-icon" />
+                <span>{detail}</span>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -148,50 +172,107 @@ export function Dashboard() {
 
       <section className="sessions-section">
         <div className="section-header">
-          <h2>{t('dashboard.sessionsOverview')}</h2>
-          <span className="section-subtitle">
-            {t('dashboard.showingSessions', { shown: sessions.length, total: stats?.total ?? 0 })}
-          </span>
+          <div className="section-title-wrap">
+            <div className="section-title-icon">
+              <Smartphone size={18} />
+            </div>
+            <div>
+              <h2>{t('dashboard.sessionsOverview')}</h2>
+            </div>
+            <span className="section-count-badge">
+              <Layers size={12} />
+              {t('dashboard.showingSessions', { shown: sessions.length, total: stats?.total ?? 0 })}
+            </span>
+          </div>
+
+          <div className="section-actions">
+            <button className="btn-link-all" onClick={() => navigate('/sessions')}>
+              <span>{t('nav.sessions')}</span>
+              <Eye size={14} />
+            </button>
+          </div>
         </div>
 
-        <div className="sessions-table">
-          <div className="table-header">
-            <span>{t('dashboard.columns.sessionId')}</span>
-            <span>{t('dashboard.columns.phone')}</span>
-            <span>{t('dashboard.columns.status')}</span>
-            <span>{t('dashboard.columns.lastActive')}</span>
-            <span>{t('dashboard.columns.actions')}</span>
-          </div>
-          {sessions.length === 0 ? (
-            <div className="table-row" style={{ justifyContent: 'center', color: 'var(--text-muted)' }}>
-              {t('dashboard.noSessions')}
+        <div className="sessions-table-wrapper">
+          <div className="sessions-table">
+            <div className="table-header">
+              <span className="th-item">
+                <Hash size={13} /> {t('dashboard.columns.sessionId')}
+              </span>
+              <span className="th-item">
+                <Phone size={13} /> {t('dashboard.columns.phone')}
+              </span>
+              <span className="th-item">
+                <Activity size={13} /> {t('dashboard.columns.status')}
+              </span>
+              <span className="th-item">
+                <Clock size={13} /> {t('dashboard.columns.lastActive')}
+              </span>
+              <span className="th-item">
+                <SlidersHorizontal size={13} /> {t('dashboard.columns.actions')}
+              </span>
             </div>
-          ) : (
-            sessions.map(session => (
-              <div key={session.id} className="table-row">
-                <div className="session-info-cell">
-                  <span className="session-id">{session.id.substring(0, 12)}</span>
-                  <span className="session-name" title={session.name}>
-                    {session.name}
-                  </span>
-                </div>
-                <span className="phone">{session.phone || '—'}</span>
-                <span className={`status-pill ${session.status}`}>{formatStatus(session.status)}</span>
-                <span className="last-active">{formatLastActive(session.lastActive)}</span>
-                <div className="actions">
-                  <button className="btn-sm" onClick={() => navigate('/sessions')}>
-                    {t('dashboard.view')}
-                  </button>
-                  {/* Stopping a session is an operator write; a read-only key would only collect a 403. */}
-                  {canWrite && isSessionStarted(session) && (
-                    <button className="btn-sm danger" onClick={() => handleDisconnect(session.id)}>
-                      {t('dashboard.disconnect')}
-                    </button>
-                  )}
-                </div>
+            {sessions.length === 0 ? (
+              <div className="table-empty-row">
+                <Smartphone size={36} className="empty-icon" />
+                <span className="empty-title">{t('dashboard.noSessions')}</span>
               </div>
-            ))
-          )}
+            ) : (
+              sessions.map(session => (
+                <div key={session.id} className="table-row">
+                  <div className="session-info-cell">
+                    <div className="session-avatar">
+                      <Smartphone size={18} />
+                    </div>
+                    <div className="session-text-group">
+                      <span className="session-name" title={session.name}>
+                        {session.name}
+                      </span>
+                      <span className="session-id-chip">{session.id.substring(0, 12)}</span>
+                    </div>
+                  </div>
+                  <span className="phone-cell">
+                    <Phone size={13} className="phone-icon" />
+                    {session.phone || '—'}
+                  </span>
+                  <span className={`status-pill ${session.status}`}>
+                    {session.status === 'ready' ? (
+                      <>
+                        <span className="status-dot pulse" />
+                        <CheckCircle2 size={13} />
+                      </>
+                    ) : session.status === 'initializing' || session.status === 'authenticating' ? (
+                      <Loader2 size={13} className="animate-spin" />
+                    ) : session.status === 'qr_ready' ? (
+                      <QrCode size={13} />
+                    ) : session.status === 'failed' ? (
+                      <AlertCircle size={13} />
+                    ) : (
+                      <XCircle size={13} />
+                    )}
+                    <span>{formatStatus(session.status)}</span>
+                  </span>
+                  <span className="last-active">
+                    <Clock size={13} className="last-active-icon" />
+                    {formatLastActive(session.lastActive)}
+                  </span>
+                  <div className="actions">
+                    <button className="btn-action btn-view" onClick={() => navigate('/sessions')}>
+                      <Eye size={13} />
+                      <span>{t('dashboard.view')}</span>
+                    </button>
+                    {/* Stopping a session is an operator write; a read-only key would only collect a 403. */}
+                    {canWrite && isSessionStarted(session) && (
+                      <button className="btn-action btn-danger" onClick={() => handleDisconnect(session.id)}>
+                        <Power size={13} />
+                        <span>{t('dashboard.disconnect')}</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </section>
     </div>

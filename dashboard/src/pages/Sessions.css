@@ -1,7 +1,27 @@
+/* =============================================
+   Sessions Page Modern Styles
+   Clean, enterprise-grade card layout & controls
+   NO emojis - Pure Lucide icons & CSS indicators
+   ============================================= */
+
 .sessions-page {
   padding: 2rem;
   width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
   box-sizing: border-box;
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .sessions-page .page-header {
@@ -9,12 +29,44 @@
   width: 100%;
 }
 
-/* H1 inherited from global */
+/* Primary Action Button (e.g. + Nouvelle session) */
+.sessions-page .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #25d366 0%, #16a34a 100%);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.28);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
+.sessions-page .btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+.sessions-page .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* =============================================
+   Filters & Search Bar
+   ============================================= */
 .sessions-page .filters-bar {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .sessions-page .search-input {
@@ -22,11 +74,18 @@
   align-items: center;
   gap: 0.75rem;
   flex: 1;
-  max-width: 400px;
-  padding: 0.75rem 1rem;
+  max-width: 420px;
+  padding: 0.7rem 1rem;
   background: var(--bg-white);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .sessions-page .search-input {
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .sessions-page .search-input svg {
@@ -40,97 +99,278 @@
   background: none;
   font-size: 0.9375rem;
   color: var(--text-primary);
+  outline: none;
 }
 
-.sessions-page .search-input input:focus {
-  outline: none;
+.sessions-page .search-input input::placeholder {
+  color: var(--text-muted);
 }
 
 .sessions-page .search-input:focus-within {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-soft);
+  box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.15);
+  transform: translateY(-1px);
 }
 
 .sessions-page .filter-group {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0 1rem;
+  padding: 0 0.85rem;
   background: var(--bg-white);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 12px;
+  height: 44px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+[data-theme='dark'] .sessions-page .filter-group {
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .sessions-page .filter-group svg {
   color: var(--text-muted);
+  flex-shrink: 0;
 }
 
 .sessions-page .filter-group .custom-select {
   flex: 1;
 }
 
+.sessions-page .filter-group:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.15);
+}
+
+/* =============================================
+   Sessions Grid & Session Card
+   ============================================= */
 .sessions-page .sessions-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 1.5rem;
   width: 100%;
 }
 
 .sessions-page .session-card {
+  position: relative;
   background: var(--bg-white);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s ease;
 }
 
+[data-theme='dark'] .sessions-page .session-card {
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
+}
+
+.sessions-page .session-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px -4px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='dark'] .sessions-page .session-card:hover {
+  border-color: rgba(37, 211, 102, 0.35);
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.55);
+}
+
+/* Top Accent Line */
+.sessions-page .session-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--card-status-color, var(--border)) 0%, transparent 80%);
+  opacity: 0.8;
+}
+
+.sessions-page .session-card.status-ready {
+  --card-status-color: #25d366;
+}
+.sessions-page .session-card.status-initializing,
+.sessions-page .session-card.status-connecting,
+.sessions-page .session-card.status-authenticating {
+  --card-status-color: #f59e0b;
+}
+.sessions-page .session-card.status-qr_ready {
+  --card-status-color: #3b82f6;
+}
+.sessions-page .session-card.status-disconnected,
+.sessions-page .session-card.status-failed {
+  --card-status-color: #ef4444;
+}
+
+/* Card Header */
 .sessions-page .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
+  gap: 0.75rem;
+}
+
+[data-theme='dark'] .sessions-page .card-header {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.sessions-page .card-header-main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.sessions-page .session-avatar-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(37, 211, 102, 0.12);
+  color: var(--primary-text);
+  border: 1px solid rgba(37, 211, 102, 0.25);
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .sessions-page .session-avatar-badge {
+  color: #4ade80;
 }
 
 .sessions-page .card-header h3 {
-  /* Inherits from H3 */
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 180px;
+  max-width: 200px;
+  letter-spacing: -0.01em;
 }
 
-.sessions-page .qr-placeholder {
-  display: flex;
-  flex-direction: column;
+/* Status Pill */
+.sessions-page .status-pill {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+  flex-shrink: 0;
+}
+
+.sessions-page .status-pill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.sessions-page .status-pill.ready {
+  background: rgba(37, 211, 102, 0.12);
+  color: var(--primary-text);
+  border-color: rgba(37, 211, 102, 0.28);
+}
+
+[data-theme='dark'] .sessions-page .status-pill.ready {
+  color: #4ade80;
+}
+
+.sessions-page .status-pill.ready::before {
+  background: var(--primary);
+  box-shadow: 0 0 6px var(--primary);
+}
+
+.sessions-page .status-pill.initializing,
+.sessions-page .status-pill.connecting,
+.sessions-page .status-pill.authenticating {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--warning-text);
+  border-color: rgba(245, 158, 11, 0.28);
+}
+
+[data-theme='dark'] .sessions-page .status-pill.initializing,
+[data-theme='dark'] .sessions-page .status-pill.connecting,
+[data-theme='dark'] .sessions-page .status-pill.authenticating {
+  color: #fbbf24;
+}
+
+.sessions-page .status-pill.qr_ready {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--info);
+  border-color: rgba(59, 130, 246, 0.28);
+}
+
+.sessions-page .status-pill.action_required {
+  background: rgba(245, 158, 11, 0.25);
+  color: var(--warning-text);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.sessions-page .status-pill.created,
+.sessions-page .status-pill.idle {
   background: var(--bg-light);
-  border-radius: var(--radius);
-  margin-bottom: 1rem;
-}
-
-.sessions-page .qr-icon {
-  color: var(--text-muted);
-  margin-bottom: 0.75rem;
-}
-
-.sessions-page .qr-placeholder p {
-  margin: 0;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  border-color: var(--border);
 }
 
+.sessions-page .status-pill.disconnected,
+.sessions-page .status-pill.failed {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--error-text);
+  border-color: rgba(239, 68, 68, 0.28);
+}
+
+/* =============================================
+   Session Info Rows
+   ============================================= */
 .sessions-page .session-info {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  background: var(--bg-light);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+}
+
+[data-theme='dark'] .sessions-page .session-info {
+  background: rgba(255, 255, 255, 0.025);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .sessions-page .info-row {
   display: flex;
   justify-content: space-between;
-  padding: 0.5rem 0;
+  align-items: center;
+  padding: 0.55rem 0;
   border-bottom: 1px solid var(--border);
+}
+
+[data-theme='dark'] .sessions-page .info-row {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
 }
 
 .sessions-page .info-row:last-child {
@@ -138,21 +378,38 @@
 }
 
 .sessions-page .info-label {
-  font-size: 0.7rem;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.sessions-page .info-row-icon {
+  color: var(--text-muted);
 }
 
 .sessions-page .info-value {
   font-size: 0.8125rem;
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .sessions-page .info-value.mono {
-  font-family: monospace;
+  font-family: 'JetBrains Mono Variable', 'JetBrains Mono', monospace;
+  background: var(--bg-white);
+  padding: 0.15rem 0.5rem;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  letter-spacing: 0.02em;
+}
+
+[data-theme='dark'] .sessions-page .info-value.mono {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .sessions-page .info-value.error-text {
@@ -165,9 +422,6 @@
   white-space: nowrap;
 }
 
-/* Mirrors .error-text, in warning rather than error: a restriction is WhatsApp limiting the account,
-   not the gateway failing. Uses --warning-text, the AA-passing amber; App.css restates it as
-   --warning in both dark-theme blocks. */
 .sessions-page .info-value.restriction-text {
   color: var(--warning-text);
   font-weight: 500;
@@ -178,117 +432,198 @@
   white-space: nowrap;
 }
 
+/* =============================================
+   Card Actions & Buttons
+   ============================================= */
 .sessions-page .card-actions {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  align-items: center;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+[data-theme='dark'] .sessions-page .card-actions {
+  border-top-color: rgba(255, 255, 255, 0.06);
 }
 
 .sessions-page .btn-action {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.5rem 0.75rem;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
   font-size: 0.8125rem;
-  font-weight: 500;
-  border-radius: 6px;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s;
   background: var(--bg-light);
   border: 1px solid var(--border);
   color: var(--text-secondary);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex: 1 1 calc(50% - 0.5rem);
+  box-sizing: border-box;
+}
+
+[data-theme='dark'] .sessions-page .btn-action {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
 }
 
 .sessions-page .btn-action:hover:not(:disabled) {
   background: var(--bg-white);
-  color: var(--text-primary);
+  border-color: var(--primary);
+  color: var(--primary-text);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] .sessions-page .btn-action:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(37, 211, 102, 0.4);
+  color: #4ade80;
 }
 
 .sessions-page .btn-action:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
+/* Danger actions */
 .sessions-page .btn-action.danger {
   color: var(--error-text);
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.25);
 }
 
-.sessions-page .btn-action.danger:hover {
-  background: rgba(239, 68, 68, 0.12);
-  border-color: rgba(239, 68, 68, 0.3);
-  /* Restated: the generic :hover:not(:disabled) rule above is more specific than .danger alone. */
+[data-theme='dark'] .sessions-page .btn-action.danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+.sessions-page .btn-action.danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(239, 68, 68, 0.45);
   color: var(--error-text);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
 }
 
-@media (max-width: 1400px) {
-  .sessions-page .sessions-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+[data-theme='dark'] .sessions-page .btn-action.danger:hover:not(:disabled) {
+  color: #fca5a5;
 }
 
-@media (max-width: 1000px) {
-  .sessions-page .sessions-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+/* =============================================
+   QR Code Placeholder (Card View)
+   ============================================= */
+.sessions-page .qr-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.25rem 1.5rem;
+  background: var(--bg-light);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  margin-bottom: 1.25rem;
+  text-align: center;
 }
 
-@media (max-width: 600px) {
-  .sessions-page .sessions-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .sessions-page {
-    padding: 1rem;
-  }
-
-  .sessions-page .filters-bar {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .sessions-page .search-input {
-    max-width: none;
-  }
-
-  .sessions-page .filter-group {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .sessions-page .filter-group .custom-select {
-    flex: 1;
-  }
-
-  .sessions-page .btn-primary {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .sessions-page .session-card {
-    padding: 1rem;
-  }
-
-  .sessions-page .card-actions {
-    flex-direction: column;
-  }
-
-  .sessions-page .card-actions .btn-action {
-    justify-content: center;
-  }
+[data-theme='dark'] .sessions-page .qr-placeholder {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-@media (max-width: 480px) {
-  .sessions-page {
-    padding: 0.75rem;
-  }
+.sessions-page .qr-icon {
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  opacity: 0.7;
 }
 
-/* Modal Overlay */
+.sessions-page .qr-placeholder p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.sessions-page .btn-sm {
+  padding: 0.55rem 1.15rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #25d366 0%, #16a34a 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 0.85rem;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sessions-page .btn-sm:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
+}
+
+.sessions-page .btn-sm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =============================================
+   Empty State
+   ============================================= */
+.sessions-page .empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4.5rem 2rem;
+  text-align: center;
+  color: var(--text-muted);
+  background: var(--bg-white);
+  border-radius: 16px;
+  border: 1px dashed var(--border);
+}
+
+[data-theme='dark'] .sessions-page .empty-state {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.sessions-page .empty-state svg {
+  margin-bottom: 1rem;
+  opacity: 0.4;
+  color: var(--text-muted);
+}
+
+.sessions-page .empty-state h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem;
+}
+
+.sessions-page .empty-state p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* =============================================
+   Modals
+   ============================================= */
 .sessions-page .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -296,29 +631,24 @@
   animation: fadeIn 0.2s ease;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Modal Card */
 .sessions-page .modal {
   background: var(--bg-white);
-  border-radius: 16px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border);
   width: 90%;
   max-width: 480px;
   animation: slideUp 0.3s ease;
-  /* Match the global modal: cap height + flex column so the body scrolls with header/footer pinned —
-     long content (QR + instructions) no longer pushes actions off-screen. */
   display: flex;
   flex-direction: column;
   max-height: 90vh;
   overflow: hidden;
+}
+
+[data-theme='dark'] .sessions-page .modal {
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.65);
 }
 
 @keyframes slideUp {
@@ -336,8 +666,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 1rem;
+  padding: 1.5rem 1.5rem 1.15rem;
   border-bottom: 1px solid var(--border);
+}
+
+[data-theme='dark'] .sessions-page .modal-header {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 .sessions-page .modal-header h2 {
@@ -361,14 +695,13 @@
 
 .sessions-page .modal-body {
   padding: 1.5rem;
-  /* Scroll the body (not the whole card) so the pinned header/footer stay visible. */
   overflow-y: auto;
   flex: 1 1 auto;
 }
 
 .sessions-page .modal-body > label {
   display: block;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 0.5rem;
@@ -376,30 +709,37 @@
 
 .sessions-page .modal-body input {
   width: 100%;
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 10px;
   font-size: 0.9375rem;
   background: var(--bg-light);
-  transition: all 0.2s;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
   box-sizing: border-box;
+}
+
+[data-theme='dark'] .sessions-page .modal-body input {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .sessions-page .modal-body input:focus {
   outline: none;
   border-color: var(--primary);
   background: var(--bg-white);
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+  box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.15);
 }
 
-.sessions-page .modal-body input::placeholder {
-  color: var(--text-muted);
+[data-theme='dark'] .sessions-page .modal-body input:focus {
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .sessions-page .input-hint {
   margin: 0.5rem 0 0;
   font-size: 0.75rem;
   color: var(--text-muted);
+  line-height: 1.4;
 }
 
 .sessions-page .input-hint code {
@@ -422,105 +762,74 @@
   justify-content: flex-end;
   gap: 0.75rem;
   padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--border);
 }
 
-/* Secondary Button */
-.sessions-page .confirm-modal {
-  max-width: 400px;
+[data-theme='dark'] .sessions-page .modal-footer {
+  border-top-color: rgba(255, 255, 255, 0.08);
 }
 
-.sessions-page .confirm-modal .modal-body p {
-  margin: 0 0 0.5rem 0;
-}
-
-.sessions-page .text-muted {
-  color: var(--text-muted);
+.sessions-page .btn-secondary {
+  padding: 0.6rem 1.15rem;
   font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 8px;
+  background: var(--bg-light);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* Icon Button */
-.sessions-page .btn-icon {
+.sessions-page .btn-secondary:hover {
+  background: var(--bg-white);
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.sessions-page .btn-danger {
+  padding: 0.6rem 1.15rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--error-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sessions-page .btn-danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.sessions-page .btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Close Button */
+.sessions-page .btn-close {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: transparent;
-  border: none;
+  width: 32px;
+  height: 32px;
+  background: var(--bg-light);
+  border: 1px solid var(--border);
   border-radius: 8px;
   cursor: pointer;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
-.sessions-page .btn-icon:hover {
-  background: var(--bg-light);
-  color: var(--text-primary);
-}
-
-/* Empty State */
-.sessions-page .empty-state {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
-  text-align: center;
-  color: var(--text-muted);
-}
-
-.sessions-page .empty-state svg {
-  margin-bottom: 1rem;
-  opacity: 0.5;
-}
-
-.sessions-page .empty-state h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin: 0 0 0.5rem;
-}
-
-.sessions-page .empty-state p {
-  margin: 0;
-  font-size: 0.875rem;
-}
-
-/* Status Badge */
-.sessions-page .status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.25rem 0.625rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.sessions-page .status-badge.connected {
-  background: rgba(34, 197, 94, 0.1);
-  color: var(--success-text);
-}
-
-.sessions-page .status-badge.disconnected {
-  background: rgba(107, 114, 128, 0.1);
-  color: var(--text-secondary);
-}
-
-.sessions-page .status-badge.connecting {
-  background: rgba(234, 179, 8, 0.1);
-  color: var(--warning-text);
-}
-
-.sessions-page .status-badge::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
+.sessions-page .btn-close:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--error-text);
 }
 
 /* Detail Grid for Session Modal */
@@ -557,157 +866,11 @@
   border-radius: 6px;
 }
 
-/* Close Button - Always Visible */
-.sessions-page .btn-close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: var(--bg-light);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  cursor: pointer;
-  color: var(--text-secondary);
-  transition: all 0.2s;
-  flex-shrink: 0;
+[data-theme='dark'] .sessions-page .detail-value.mono {
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.sessions-page .btn-close svg {
-  width: 20px !important;
-  height: 20px !important;
-  min-width: 20px;
-  flex-shrink: 0;
-}
-
-.sessions-page .btn-close:hover {
-  background: rgba(239, 68, 68, 0.12);
-  border-color: rgba(239, 68, 68, 0.3);
-  color: var(--error-text);
-}
-
-.sessions-page .btn-close:hover svg {
-  stroke: var(--error);
-}
-
-/* QR Modal Specific */
-.sessions-page .qr-modal .modal-body {
-  padding: 1.5rem;
-}
-
-.sessions-page .qr-instructions {
-  margin-top: 1.5rem;
-  text-align: start;
-  background: var(--bg-light);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-}
-
-.sessions-page .qr-step {
-  margin: 0;
-  padding: 0.5rem 0;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  border-bottom: 1px solid var(--border);
-}
-
-.sessions-page .qr-step:last-child {
-  border-bottom: none;
-}
-
-.sessions-page .qr-step strong {
-  color: var(--text-primary);
-}
-
-.sessions-page .qr-auto-refresh {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.sessions-page .spin-slow {
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Status Pill for Card Headers */
-.sessions-page .status-pill {
-  display: inline-flex;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.sessions-page .status-pill.created,
-.sessions-page .status-pill.idle {
-  background: rgba(107, 114, 128, 0.1);
-  color: var(--text-secondary);
-}
-
-.sessions-page .status-pill.initializing,
-.sessions-page .status-pill.connecting,
-.sessions-page .status-pill.authenticating {
-  background: rgba(234, 179, 8, 0.1);
-  color: var(--warning-text);
-}
-
-.sessions-page .status-pill.qr_ready {
-  background: rgba(59, 130, 246, 0.1);
-  color: var(--info);
-}
-
-/* Same amber token as the transient states above — a literal here was the only pill not on a theme
-   variable, and it lost contrast on the dark card. The heavier tint is what separates "needs a human"
-   from the in-progress amber, since the two must not read alike. */
-.sessions-page .status-pill.action_required {
-  background: rgba(245, 158, 11, 0.22);
-  color: var(--warning-text);
-}
-
-.sessions-page .status-pill.ready {
-  background: rgba(34, 197, 94, 0.1);
-  color: var(--success-text);
-}
-
-.sessions-page .status-pill.disconnected,
-.sessions-page .status-pill.failed {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--error-text);
-}
-
-/* Small Button for QR Placeholder */
-.sessions-page .btn-sm {
-  padding: 0.5rem 1rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 0.75rem;
-  transition: background 0.2s;
-}
-
-.sessions-page .btn-sm:hover {
-  background: var(--primary-hover);
-}
-
-/* Pairing Code Mode Specific Styles */
+/* Pairing Code Display */
 .sessions-page .pairing-tabs {
   display: flex;
   gap: 0.5rem;
@@ -736,56 +899,10 @@
   box-shadow: var(--shadow-sm);
 }
 
-.sessions-page .pairing-container {
-  padding: 0.5rem 0;
-}
-
-.sessions-page .pairing-error {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  text-align: start;
-  color: var(--error-text);
-  background: rgb(239 68 68 / 0.12);
-}
-
-.sessions-page .pairing-warning {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  border-radius: 8px;
-  font-size: 0.8125rem;
-  text-align: start;
-  color: var(--warning-text);
-  background: rgb(245 158 11 / 0.12);
-}
-
-.sessions-page .pairing-form {
-  text-align: start;
-}
-
-.sessions-page .pairing-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-}
-
-.sessions-page .pairing-input {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 0.9375rem;
-  background: var(--bg-light);
-  margin-bottom: 0.5rem;
-  box-sizing: border-box;
-}
-
 .sessions-page .pairing-code-display {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Force LTR so the two code halves never get reordered by the bidi algorithm in RTL locales. */
   direction: ltr;
   unicode-bidi: isolate;
   gap: 0.75rem;
@@ -801,106 +918,47 @@
   margin: 1.5rem 0;
 }
 
-.sessions-page .pairing-instructions-title {
-  margin: 0 0 0.5rem;
-  font-weight: 600;
-  font-size: 0.9375rem;
-  color: var(--text-primary);
+[data-theme='dark'] .sessions-page .pairing-code-display {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #4ade80;
 }
 
-/* Auto-reject toggle in the session detail modal. The toggle-switch rules mirror the per-page copies
-   in Webhooks.css / Plugins.css / Infrastructure.css — this codebase scopes them per page rather
-   than sharing one definition. The visually-hidden input is excluded from the modal's
-   input[type='checkbox'] reset in index.css, so it keeps width:0 here. */
-.sessions-page .detail-toggle-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+/* =============================================
+   Responsive Design
+   ============================================= */
+@media (max-width: 768px) {
+  .sessions-page {
+    padding: 1.25rem 1rem;
+  }
+
+  .sessions-page .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .sessions-page .search-input {
+    max-width: none;
+  }
+
+  .sessions-page .filter-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .sessions-page .sessions-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .sessions-page .card-actions .btn-action {
+    flex: 1 1 100%;
+  }
 }
 
-.sessions-page .detail-hint {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  line-height: 1.4;
-}
-
-.sessions-page .toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 48px;
-  height: 26px;
-  flex-shrink: 0;
-}
-
-.sessions-page .toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.sessions-page .toggle-slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--border);
-  transition: 0.3s;
-  border-radius: 26px;
-}
-
-.sessions-page .toggle-slider::before {
-  position: absolute;
-  content: '';
-  height: 20px;
-  width: 20px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: 0.3s;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-.sessions-page .toggle-switch input:checked + .toggle-slider {
-  background-color: var(--primary);
-}
-
-.sessions-page .toggle-switch input:checked + .toggle-slider::before {
-  transform: translateX(22px);
-}
-
-/* A viewer-role key cannot write, and the control is also held during a save. The page copies this
-   rule came from have no disabled state because none of their toggles can be disabled; without it
-   the switch looks live to someone who can never move it. */
-.sessions-page .toggle-switch input:disabled + .toggle-slider {
-  cursor: not-allowed;
-  opacity: 0.55;
-}
-
-.sessions-page .toggle-switch input:focus-visible + .toggle-slider {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.sessions-page .proxy-form-section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-}
-
-.sessions-page .proxy-form-section input[type='text'] {
-  width: 100%;
-  padding: 0.625rem 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg-white);
-  color: var(--text-primary);
-  font-size: 0.9375rem;
-  box-sizing: border-box;
+@media (max-width: 480px) {
+  .sessions-page {
+    padding: 0.75rem;
+  }
 }

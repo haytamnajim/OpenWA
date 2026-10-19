@@ -171,7 +171,9 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
             {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
           <div className="mobile-brand">
-            <img src="/openwa_logo.webp" alt="OpenWA" className="sidebar-logo" />
+            <div className="sidebar-logo-wrap mobile">
+              <img src="/openwa_logo.webp" alt="OpenWA" className="sidebar-logo" />
+            </div>
             <span className="brand-name">{t('common.appName')}</span>
           </div>
           <div style={{ width: 40 }} />
@@ -184,14 +186,19 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
         className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobile ? 'mobile' : ''} ${isMobileOpen ? 'open' : ''}`}
       >
         <div className="sidebar-header">
-          <img src="/openwa_logo.webp" alt="OpenWA" className="sidebar-logo" />
+          <div className="sidebar-logo-wrap">
+            <img src="/openwa_logo.webp" alt="OpenWA" className="sidebar-logo" />
+          </div>
           {!isCollapsed && (
             <div className="sidebar-brand">
-              <span className="brand-name">{t('common.appName')}</span>
-              <span className="brand-version">v{version}</span>
+              <div className="sidebar-brand-top">
+                <span className="brand-name">{t('common.appName')}</span>
+                <span className="brand-version">v{version}</span>
+              </div>
               {update && (
                 <a className="brand-update" href={update.url} target="_blank" rel="noopener noreferrer">
-                  {t('common.updateAvailable', { version: update.latest })}
+                  <span className="brand-update-dot" />
+                  <span>{t('common.updateAvailable', { version: update.latest })}</span>
                 </a>
               )}
             </div>
@@ -231,57 +238,61 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
                 onClick={handleNavClick}
                 title={isCollapsed ? label : undefined}
               >
-                <Icon size={20} />
-                {!isCollapsed && <span>{label}</span>}
+                <div className="nav-icon-wrap">
+                  <Icon size={19} />
+                </div>
+                {!isCollapsed && <span className="nav-label">{label}</span>}
               </NavLink>
             );
           })}
         </nav>
 
         <div className="sidebar-footer">
-          <div className="language-menu" ref={languageMenuRef}>
-            <button
-              className="theme-toggle-btn"
-              onClick={() => setIsLanguageMenuOpen(open => !open)}
-              title={t('common.language')}
-              aria-label={t('common.language')}
-              aria-haspopup="menu"
-              aria-expanded={isLanguageMenuOpen}
-            >
-              <Languages size={18} />
-              {!isCollapsed && <span>{languageLabel}</span>}
-            </button>
-            {isLanguageMenuOpen && (
-              <div className="language-menu-list" role="menu" aria-label={t('common.language')}>
-                {languageOptions.map(option => (
-                  <button
-                    key={option.value}
-                    className={`language-menu-item ${option.value === currentLang ? 'active' : ''}`}
-                    onClick={() => changeLanguage(option.value)}
-                    role="menuitemradio"
-                    aria-checked={option.value === currentLang}
-                  >
-                    <span>{option.label}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="appearance-menu">
-            <button
-              className="theme-toggle-btn"
-              onClick={toggleTheme}
-              title={nextThemeLabel}
-              aria-label={nextThemeLabel}
-            >
-              <span className="appearance-button-cue" aria-hidden="true">
-                <ThemeIcon size={16} />
-              </span>
-              {!isCollapsed && <span>{themeLabel}</span>}
-            </button>
+          <div className="sidebar-footer-controls">
+            <div className="language-menu" ref={languageMenuRef}>
+              <button
+                className="theme-toggle-btn"
+                onClick={() => setIsLanguageMenuOpen(open => !open)}
+                title={t('common.language')}
+                aria-label={t('common.language')}
+                aria-haspopup="menu"
+                aria-expanded={isLanguageMenuOpen}
+              >
+                <Languages size={16} />
+                {!isCollapsed && <span>{languageLabel}</span>}
+              </button>
+              {isLanguageMenuOpen && (
+                <div className="language-menu-list" role="menu" aria-label={t('common.language')}>
+                  {languageOptions.map(option => (
+                    <button
+                      key={option.value}
+                      className={`language-menu-item ${option.value === currentLang ? 'active' : ''}`}
+                      onClick={() => changeLanguage(option.value)}
+                      role="menuitemradio"
+                      aria-checked={option.value === currentLang}
+                    >
+                      <span>{option.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="appearance-menu">
+              <button
+                className="theme-toggle-btn"
+                onClick={toggleTheme}
+                title={nextThemeLabel}
+                aria-label={nextThemeLabel}
+              >
+                <span className="appearance-button-cue" aria-hidden="true">
+                  <ThemeIcon size={16} />
+                </span>
+                {!isCollapsed && <span>{themeLabel}</span>}
+              </button>
+            </div>
           </div>
           <button className="logout-btn" onClick={onLogout} title={isCollapsed ? t('common.logout') : undefined}>
-            <LogOut size={20} />
+            <LogOut size={16} />
             {!isCollapsed && <span>{t('common.logout')}</span>}
           </button>
         </div>

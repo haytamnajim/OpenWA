@@ -295,6 +295,7 @@ services:
       - DASHBOARD_URL=${DASHBOARD_URL:-}
     volumes:
       - ./data:/app/data
+      - ./dashboard/dist:/app/dashboard/dist:ro
     restart: unless-stopped
     # Same teardown budget as docker-compose.yml, which has the arithmetic: Docker's 10s default would
     # SIGKILL the container while an engine is still stopping.

@@ -16,6 +16,10 @@ import {
   Unlink,
   Globe,
   AlertCircle,
+  Smartphone,
+  Phone,
+  Hash,
+  Clock,
 } from 'lucide-react';
 import {
   sessionApi,
@@ -1232,9 +1236,14 @@ export function Sessions() {
           </div>
         ) : (
           filteredSessions.map(session => (
-            <div key={session.id} className="session-card">
+            <div key={session.id} className={`session-card status-${session.status}`}>
               <div className="card-header">
-                <h3 title={session.name}>{session.name}</h3>
+                <div className="card-header-main">
+                  <div className="session-avatar-badge">
+                    <Smartphone size={18} />
+                  </div>
+                  <h3 title={session.name}>{session.name}</h3>
+                </div>
                 <span className={`status-pill ${session.status}`}>{formatStatus(session.status)}</span>
               </div>
 
@@ -1257,15 +1266,24 @@ export function Sessions() {
               ) : (
                 <div className="session-info">
                   <div className="info-row">
-                    <span className="info-label">{t('sessions.card.phone')}</span>
+                    <span className="info-label">
+                      <Phone size={12} className="info-row-icon" />
+                      {t('sessions.card.phone')}
+                    </span>
                     <span className="info-value">{session.phone || '—'}</span>
                   </div>
                   <div className="info-row">
-                    <span className="info-label">{t('sessions.card.sessionId')}</span>
+                    <span className="info-label">
+                      <Hash size={12} className="info-row-icon" />
+                      {t('sessions.card.sessionId')}
+                    </span>
                     <span className="info-value mono">{session.id.substring(0, 12)}</span>
                   </div>
                   <div className="info-row">
-                    <span className="info-label">{t('sessions.card.lastActive')}</span>
+                    <span className="info-label">
+                      <Clock size={12} className="info-row-icon" />
+                      {t('sessions.card.lastActive')}
+                    </span>
                     <span className="info-value">{formatLastActive(session.lastActive)}</span>
                   </div>
                   {(session.status === 'failed' || session.status === 'action_required') && session.lastError ? (
